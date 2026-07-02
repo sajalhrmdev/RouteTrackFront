@@ -170,12 +170,12 @@ export default function EmployeeDashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Employee Dashboard</h1>
             <p className="text-muted-foreground">Track your work time and location</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {!isOnline && (
               <Badge variant="warning" className="flex items-center gap-1">
                 <WifiOff className="h-3 w-3" /> Offline

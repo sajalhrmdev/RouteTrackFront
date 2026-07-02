@@ -37,12 +37,12 @@ export default function EmployeesPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Employees</h1>
             <p className="text-muted-foreground">Manage your workforce</p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2 w-full sm:w-auto">
             <UserPlus className="h-4 w-4" />
             Add Employee
           </Button>
@@ -50,9 +50,9 @@ export default function EmployeesPage() {
 
         <Card>
           <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <CardTitle>All Employees</CardTitle>
-              <div className="relative w-72">
+              <div className="relative w-full sm:w-72">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search employees..."

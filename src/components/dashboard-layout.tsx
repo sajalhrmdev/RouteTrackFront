@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { Sidebar } from '@/components/sidebar';
+import { MobileHeader } from '@/components/mobile-header';
 import { useAppStore } from '@/store/app';
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -22,12 +23,13 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
+      <MobileHeader />
       <main
         className={`transition-all duration-300 ${
-          sidebarOpen ? 'ml-[260px]' : 'ml-[72px]'
-        } min-h-screen`}
+          sidebarOpen ? 'md:ml-[260px]' : 'md:ml-[72px]'
+        } min-h-screen pt-14 md:pt-0`}
       >
-        <div className="p-6 max-w-7xl mx-auto">{children}</div>
+        <div className="p-4 md:p-6 max-w-7xl mx-auto">{children}</div>
       </main>
     </div>
   );

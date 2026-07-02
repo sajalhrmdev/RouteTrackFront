@@ -32,12 +32,12 @@ export default function ReportsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Attendance Reports</h1>
             <p className="text-muted-foreground">View and export attendance data</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button variant="outline" className="gap-2">
               <FileSpreadsheet className="h-4 w-4" />
               Excel

@@ -17,7 +17,7 @@ import { Employee, RouteHistory } from '@/types';
 import { formatDuration, formatDistance, formatDate } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const RouteMap: any = dynamic(() => import('@/components/route-map').then((m) => m.RouteMap), {
+const RouteAnimation: any = dynamic(() => import('@/components/route-animation').then((m) => m.RouteAnimation), {
   ssr: false,
   loading: () => <Skeleton className="h-[450px] w-full rounded-xl" />,
 });
@@ -47,12 +47,12 @@ export default function RouteHistoryPage() {
         </div>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-4 md:p-6">
             <div className="flex flex-wrap gap-4 items-end">
-              <div className="space-y-2">
+              <div className="space-y-2 w-full sm:w-auto">
                 <Label>Select Employee</Label>
                 <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
-                  <SelectTrigger className="w-[250px]">
+                  <SelectTrigger className="w-full sm:w-[250px]">
                     <SelectValue placeholder="Choose employee..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -64,13 +64,13 @@ export default function RouteHistoryPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 w-full sm:w-auto">
                 <Label>Select Date</Label>
                 <Input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-[200px]"
+                  className="w-full sm:w-[200px]"
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function RouteHistoryPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <Card className="lg:col-span-3 overflow-hidden">
               <CardContent className="p-0 h-[450px]">
-                <RouteMap route={routeHistory} />
+                <RouteAnimation route={routeHistory} />
               </CardContent>
             </Card>
 
@@ -92,28 +92,28 @@ export default function RouteHistoryPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
                       <Route className="h-4 w-4" />
                       Distance
                     </div>
                     <span className="font-medium">{formatDistance(routeHistory.totalDistance)}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
                       <Clock className="h-4 w-4" />
                       Duration
                     </div>
                     <span className="font-medium">{formatDuration(routeHistory.totalTime)}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
                       <MapPin className="h-4 w-4" />
                       Points
                     </div>
                     <span className="font-medium">{routeHistory.locations.length}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
                       <Navigation className="h-4 w-4" />
                       Avg Speed
                     </div>

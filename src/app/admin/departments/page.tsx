@@ -32,12 +32,12 @@ export default function DepartmentsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Departments</h1>
             <p className="text-muted-foreground">Organize your teams</p>
           </div>
-          <Button className="gap-2" onClick={() => setShowForm(!showForm)}>
+          <Button className="gap-2 w-full sm:w-auto" onClick={() => setShowForm(!showForm)}>
             <Plus className="h-4 w-4" />
             Add Department
           </Button>

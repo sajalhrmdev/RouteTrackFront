@@ -29,12 +29,12 @@ export default function DesignationsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Designations</h1>
             <p className="text-muted-foreground">Define roles and positions</p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2 w-full sm:w-auto">
             <Plus className="h-4 w-4" />
             Add Designation
           </Button>
