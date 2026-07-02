@@ -104,8 +104,6 @@ export function LiveMap({ employees }: { employees: any[] }) {
 
       const initials = (emp.employeeName?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)) || 'NA';
       const speedKmh = emp.lastLocation.speed != null ? (emp.lastLocation.speed * 3.6).toFixed(1) : null;
-      const batteryPct = emp.lastLocation.batteryLevel != null ? Math.round(emp.lastLocation.batteryLevel) : null;
-      const batteryColor = batteryPct != null ? (batteryPct > 60 ? '#22c55e' : batteryPct > 20 ? '#eab308' : '#ef4444') : '';
       const timeStr = emp.lastLocation.timestamp ? new Date(emp.lastLocation.timestamp).toLocaleTimeString() : '';
 
       marker.bindPopup(`
@@ -119,7 +117,6 @@ export function LiveMap({ employees }: { employees: any[] }) {
           </div>
           <div style="font-size:12px;line-height:1.6">
             ${speedKmh != null ? `<div style="display:flex;align-items:center;gap:8px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span>${speedKmh} km/h</span></div>` : ''}
-            ${batteryPct != null ? `<div style="display:flex;align-items:center;gap:8px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${batteryColor}" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="10" x2="23" y2="14"/><line x1="19" y1="10" x2="19" y2="14" stroke="${batteryColor}" stroke-width="3"/></svg><span>${batteryPct}%</span></div>` : ''}
             <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:${emp.isOnline ? '#22c55e' : '#9ca3af'}"></span><span>${emp.isOnline ? 'Online' : 'Offline'}</span></div>
             ${timeStr ? `<p style="color:var(--muted-text, #999);margin:4px 0 0;font-size:11px">${timeStr}</p>` : ''}
           </div>

@@ -32,7 +32,6 @@ export function useSocket() {
         longitude: data.longitude,
         speed: data.speed,
         heading: data.heading,
-        batteryLevel: data.batteryLevel,
         timestamp: data.timestamp,
       });
     });
@@ -67,7 +66,6 @@ export function useSocket() {
     accuracy?: number;
     speed?: number;
     heading?: number;
-    batteryLevel?: number;
   }) => {
     socketRef.current?.emit('locationUpdate', data);
   }, []);

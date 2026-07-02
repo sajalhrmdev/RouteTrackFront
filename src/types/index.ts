@@ -80,7 +80,6 @@ export interface GpsLocationData {
   accuracy?: number;
   speed?: number;
   heading?: number;
-  batteryLevel?: number;
   timestamp: string;
 }
 
@@ -90,8 +89,17 @@ export interface GpsLocation extends GpsLocationData {
   attendanceId?: string;
 }
 
+export interface RouteStop {
+  latitude: number;
+  longitude: number;
+  arrivedAt: string;
+  departedAt: string;
+  duration: number;
+}
+
 export interface RouteHistory {
   locations: GpsLocation[];
+  stops?: RouteStop[];
   totalDistance: number;
   totalTime: number;
   startTime?: string;

@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   MapPin,
-  Map,
   Users,
   Building2,
   Briefcase,
@@ -31,7 +30,6 @@ import { Badge } from '@/components/ui/badge';
 
 const adminNavItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/admin/live-tracking', icon: Map, label: 'Live Tracking' },
   { href: '/admin/employees', icon: Users, label: 'Employees' },
   { href: '/admin/departments', icon: Building2, label: 'Departments' },
   { href: '/admin/designations', icon: Briefcase, label: 'Designations' },

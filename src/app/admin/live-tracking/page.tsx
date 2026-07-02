@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { Map, Users, Clock, Route, Battery, Navigation } from 'lucide-react';
+import { Map, Users, Clock, Route, Navigation } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -41,7 +41,6 @@ export default function LiveTrackingPage() {
         longitude: loc.longitude,
         speed: loc.speed,
         heading: loc.heading,
-        batteryLevel: loc.batteryLevel,
         timestamp: loc.timestamp,
       },
       totalDistance: loc.attendance.totalDistance,
@@ -69,7 +68,7 @@ export default function LiveTrackingPage() {
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4 flex items-center gap-3">
               <Users className="h-8 w-8 text-primary" />
@@ -85,19 +84,6 @@ export default function LiveTrackingPage() {
               <div>
                 <p className="text-2xl font-bold">{(avgSpeed * 3.6).toFixed(1)}</p>
                 <p className="text-xs text-muted-foreground">Avg Speed (km/h)</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 flex items-center gap-3">
-              <Battery className="h-8 w-8 text-yellow-500" />
-              <div>
-                <p className="text-2xl font-bold">
-                  {liveLocations
-                    ? Math.round(liveLocations.filter((l) => l.batteryLevel != null).reduce((a, l) => a + (l.batteryLevel ?? 0), 0) / Math.max(liveLocations.filter((l) => l.batteryLevel != null).length, 1))
-                    : 0}%
-                </p>
-                <p className="text-xs text-muted-foreground">Avg Battery</p>
               </div>
             </CardContent>
           </Card>
@@ -167,12 +153,6 @@ export default function LiveTrackingPage() {
                           <span className="flex items-center gap-1">
                             <Navigation className="h-3 w-3" />
                             {(emp.lastLocation.speed * 3.6).toFixed(1)} km/h
-                          </span>
-                        )}
-                        {emp.lastLocation?.batteryLevel != null && (
-                          <span className={`flex items-center gap-1 ${emp.lastLocation.batteryLevel > 60 ? 'text-green-500' : emp.lastLocation.batteryLevel > 20 ? 'text-yellow-500' : 'text-red-500'}`}>
-                            <Battery className="h-3 w-3" />
-                            {Math.round(emp.lastLocation.batteryLevel)}%
                           </span>
                         )}
                       </div>

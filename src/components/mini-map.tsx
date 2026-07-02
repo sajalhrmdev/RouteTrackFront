@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 
 const CURRENT_POSITION_ICON = L.divIcon({
   className: 'bg-transparent',
-  html: `<div class="w-4 h-4 rounded-full bg-primary shadow-lg border-2 border-background"></div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8],
+  html: `<div class="w-5 h-5 rounded-full bg-primary shadow-lg border-3 border-background flex items-center justify-center">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+  </div>`,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
 });
 
 export function MiniMap({
@@ -25,6 +27,7 @@ export function MiniMap({
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const polylineRef = useRef<L.Polyline | null>(null);
   const positionMarkerRef = useRef<L.Marker | null>(null);
+  const initialPosition = useRef<[number, number] | null>(null);
 
   const tileUrl = isDark
     ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
@@ -34,12 +37,12 @@ export function MiniMap({
     ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
-  const center = currentPosition || [40.7128, -74.006] as [number, number];
-
   useEffect(() => {
     if (containerRef.current && !mapRef.current) {
+      const initial = currentPosition || [40.7128, -74.006] as [number, number];
+      initialPosition.current = initial;
       mapRef.current = L.map(containerRef.current, {
-        center,
+        center: initial,
         zoom: 15,
         zoomControl: false,
         dragging: false,
@@ -76,6 +79,7 @@ export function MiniMap({
 
     if (currentPosition) {
       positionMarkerRef.current = L.marker(currentPosition, { icon: CURRENT_POSITION_ICON }).addTo(map);
+      map.panTo(currentPosition, { animate: true, duration: 0.3 });
     }
 
     if (polylineRef.current) {
@@ -83,19 +87,25 @@ export function MiniMap({
       polylineRef.current = null;
     }
 
-    if (points.length > 1) {
-      polylineRef.current = L.polyline(points, {
-        color: '#3b82f6',
-        weight: 3,
-        opacity: 0.7,
-      }).addTo(map);
+    if (points.length > 0) {
+      if (points.length === 1) {
+        const pos = currentPosition || points[0];
+        map.setView(pos, 15);
+      } else {
+        polylineRef.current = L.polyline(points, {
+          color: '#3b82f6',
+          weight: 3,
+          opacity: 0.7,
+        }).addTo(map);
 
-      if (points.length > 0) {
-        const bounds = L.latLngBounds(points.map((p) => L.latLng(p[0], p[1])));
+        const allPoints = currentPosition ? [...points, currentPosition] : points;
+        const bounds = L.latLngBounds(allPoints.map((p) => L.latLng(p[0], p[1])));
         if (bounds.isValid()) {
           map.fitBounds(bounds, { padding: [30, 30], maxZoom: 16 });
         }
       }
+    } else if (currentPosition) {
+      map.setView(currentPosition, 15);
     }
   }, [points, currentPosition]);
 

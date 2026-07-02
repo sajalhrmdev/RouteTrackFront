@@ -11,7 +11,6 @@ export interface LiveLocation {
   accuracy: number | null;
   speed: number | null;
   heading: number | null;
-  batteryLevel: number | null;
   timestamp: string;
   employee: {
     id: string;

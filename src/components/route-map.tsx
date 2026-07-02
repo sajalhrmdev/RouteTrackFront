@@ -20,11 +20,18 @@ const END_ICON = L.divIcon({
   iconAnchor: [16, 16],
 });
 
-const STOP_ICON = L.divIcon({
+const POINT_ICON = L.divIcon({
   className: 'bg-transparent',
-  html: `<div class="w-4 h-4 rounded-full bg-yellow-500 shadow-lg border-2 border-background"></div>`,
-  iconSize: [16, 16],
-  iconAnchor: [8, 8],
+  html: `<div class="w-[5px] h-[5px] rounded-full bg-emerald-500 opacity-60"></div>`,
+  iconSize: [5, 5],
+  iconAnchor: [2.5, 2.5],
+});
+
+const STOP_DOT_ICON = L.divIcon({
+  className: 'bg-transparent',
+  html: `<div class="w-3 h-3 rounded-full bg-orange-500 shadow-sm border border-orange-600"></div>`,
+  iconSize: [12, 12],
+  iconAnchor: [6, 6],
 });
 
 export function RouteMap({ route }: { route: RouteHistory }) {
@@ -92,9 +99,10 @@ export function RouteMap({ route }: { route: RouteHistory }) {
     }
 
     polylineRef.current = L.polyline(positions, {
-      color: '#3b82f6',
+      color: '#ef4444',
       weight: 4,
-      opacity: 0.8,
+      opacity: 0.5,
+      dashArray: '8, 8',
     }).addTo(map);
 
     const startMarker = L.marker(positions[0], { icon: START_ICON })
@@ -102,30 +110,39 @@ export function RouteMap({ route }: { route: RouteHistory }) {
       .addTo(map);
     markersRef.current.push(startMarker);
 
+    positions.slice(1, -1).forEach((pos) => {
+      const m = L.marker(pos, { icon: POINT_ICON }).addTo(map);
+      markersRef.current.push(m);
+    });
+
     const endMarker = L.marker(positions[positions.length - 1], { icon: END_ICON })
       .bindPopup(`End: ${route.endTime ? formatDate(route.endTime, 'long') : 'N/A'}`)
       .addTo(map);
     markersRef.current.push(endMarker);
 
-    positions.slice(1, -1).forEach((pos, idx) => {
-      const stopMarker = L.marker(pos, { icon: STOP_ICON })
-        .bindPopup(`
-          <div style="font-size:12px">
-            <p style="margin:0 0 4px">Stop ${idx + 1}</p>
-            <p style="margin:0;color:#666">
-              ${route.locations[idx + 1]?.timestamp ? formatDate(route.locations[idx + 1].timestamp, 'time') : ''}
-            </p>
-          </div>
-        `)
-        .addTo(map);
-      markersRef.current.push(stopMarker);
-    });
+    if (route.stops) {
+      route.stops.forEach((stop) => {
+        const pos: [number, number] = [stop.latitude, stop.longitude];
+        const mins = Math.floor(stop.duration / 60);
+        const marker = L.marker(pos, { icon: STOP_DOT_ICON })
+          .bindPopup(`
+            <div style="font-size:12px;line-height:1.5">
+              <p style="font-weight:600;margin:0 0 4px">Pause</p>
+              <p style="margin:0">Arrived: ${formatDate(stop.arrivedAt, 'time')}</p>
+              <p style="margin:0">Departed: ${formatDate(stop.departedAt, 'time')}</p>
+              <p style="margin:0;color:#ea580c">Duration: ${mins}m ${stop.duration % 60}s</p>
+            </div>
+          `)
+          .addTo(map);
+        markersRef.current.push(marker);
+      });
+    }
 
     const bounds = L.latLngBounds(positions.map((p) => L.latLng(p[0], p[1])));
     if (bounds.isValid()) {
       map.fitBounds(bounds, { padding: [40, 40] });
     }
-  }, [positions, route.startTime, route.endTime, route.locations]);
+  }, [positions, route.startTime, route.endTime, route.locations, route.stops]);
 
   return <div ref={containerRef} className="h-full w-full rounded-lg" />;
 }

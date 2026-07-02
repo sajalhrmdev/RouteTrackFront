@@ -10,7 +10,6 @@ interface PendingLocation {
   accuracy?: number;
   speed?: number;
   heading?: number;
-  batteryLevel?: number;
   timestamp: string;
 }
 
